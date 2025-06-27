@@ -11,32 +11,33 @@ const displayText = document.getElementById("display-text");
 
 const keys = [Q, W, E, A, S, D, Z, X, C];
 
+
+function playSound(key) {
+    const audio = document.getElementById(key.innerText.trim());
+    if (audio) {
+        audio.currentTime = 0;
+        audio.play();
+    }
+    displayText.innerText = key.id;
+    key.style.backgroundColor = "darkorange";
+    setTimeout(() => key.style.backgroundColor = "", 100);
+}
+let touchHandled = false;
+
 keys.forEach((key) => {
+    key.addEventListener('touchstart', (e) => {
+        touchHandled = true;
+        playSound(key);
+        // Prevents the following click event
+        e.preventDefault();
+    });
     key.addEventListener('click', () => {
-        
-        const audio = document.getElementById(key.innerText);
-        audio.currentTime = 0; // Reset audio to start
-        audio.play();
-        displayText.innerText = key.id;
-        key.style.backgroundColor = "darkorange";
-        setTimeout(() => 
-        key.style.backgroundColor = "", 100);
-    })
-});
-keys.forEach((key) => {
-    key.addEventListener('touchstart', () => {
-        key.addEventListener('touchstart', () => {});
-        key.addEventListener('touchend', () => {});
-        key.addEventListener('touchcancel', () => {});
-        key.addEventListener('touchmove', () => {});
-        const audio = document.getElementById(key.innerText);
-        audio.currentTime = 0; // Reset audio to start
-        audio.play();
-        displayText.innerText = key.id;
-        key.style.backgroundColor = "darkorange";
-        setTimeout(() => 
-        key.style.backgroundColor = "", 100);
-    })
+        if (touchHandled) {
+            touchHandled = false;
+            return;
+        }
+        playSound(key);
+    });
 });
 
 
